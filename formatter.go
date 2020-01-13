@@ -82,7 +82,7 @@ func (p *printer) printInline(v reflect.Value, x interface{}, showType bool) {
 		case int64, uint64:
 			fmt.Fprintf(p, "(%#d)", x)
 		case float64:
-			fmt.Fprintf(p, "(%#f)", x)
+			fmt.Fprintf(p, "(%#.4f)", x)
 		default:
 			fmt.Fprintf(p, "(%#v)", x)
 		}
@@ -92,7 +92,7 @@ func (p *printer) printInline(v reflect.Value, x interface{}, showType bool) {
 		case int64, uint64:
 			fmt.Fprintf(p, "%#d", x)
 		case float64:
-			fmt.Fprintf(p, "%#f", x)
+			fmt.Fprintf(p, "%#.4f", x)
 		default:
 			fmt.Fprintf(p, "%#v", x)
 		}
