@@ -113,6 +113,25 @@ func (p *printer) printValue(v reflect.Value, showType, quote bool) {
 		return
 	}
 
+	if p.depth > 2 {
+		switch v.Kind() {
+		case reflect.Struct:
+			t := v.Type()
+			if v.CanAddr() {
+				addr := v.UnsafeAddr()
+				vis := visit{addr, t}
+				if vd, ok := p.visited[vis]; ok && vd < p.depth {
+					p.fmtString(t.String()+"{(CYCLIC REFERENCE)}", false)
+					return // don't print v again
+				}
+
+				io.WriteString(p, v.Type().String())
+				io.WriteString(p, fmt.Sprintf(" {0x%x}", addr))
+				return
+			}
+		}
+	}
+
 	switch v.Kind() {
 	case reflect.Bool:
 		p.printInline(v, v.Bool(), showType)
