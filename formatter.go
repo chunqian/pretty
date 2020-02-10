@@ -172,7 +172,7 @@ func (p *printer) printValue(v reflect.Value, showType, quote bool) {
 			}
 			p.visited[vis] = p.depth
 
-			if p.depth > 2 {
+			if p.depth > 3 {
 				writeByte(p, '(')
 				writeByte(p, '*')
 				io.WriteString(p, v.Type().String())
