@@ -24,11 +24,11 @@ func init() {
 	if err == nil {
 		logD := config.Get("LOG_DEPTH")
 		if logD == nil {
-			fmt.Printf("q.Q Log Depth is %d\n", depth)
+			fmt.Printf("pretty Log Depth is %d\n", depth)
 			return
 		}
 		depth = logD.(int64)
-		fmt.Printf("q.Q Log Depth is %d\n", depth)
+		fmt.Printf("pretty Log Depth is %d\n", depth)
 		return
 	}
 
@@ -37,11 +37,11 @@ func init() {
 	if err == nil {
 		logD := config.Get("LOG_DEPTH")
 		if logD == nil {
-			fmt.Printf("q.Q Log Depth is %d\n", depth)
+			fmt.Printf("pretty Log Depth is %d\n", depth)
 			return
 		}
 		depth = logD.(int64)
-		fmt.Printf("q.Q Log Depth is %d\n", depth)
+		fmt.Printf("pretty Log Depth is %d\n", depth)
 		return
 	}
 }
