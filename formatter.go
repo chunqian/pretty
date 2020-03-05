@@ -3,12 +3,48 @@ package pretty
 import (
 	"fmt"
 	"io"
+	"os"
+	"path/filepath"
 	"reflect"
 	"strconv"
 	"text/tabwriter"
 
 	"github.com/kr/text"
+	"github.com/pelletier/go-toml"
 )
+
+var depth int64
+
+func init() {
+	depth = 3
+
+	dir, _ := os.Executable()
+	path := filepath.Dir(dir)
+	config, err := toml.LoadFile(path + "/q.toml")
+	if err == nil {
+		logD := config.Get("LOG_DEPTH")
+		if logD == nil {
+			fmt.Printf("q.Q Log Depth is %d\n", depth)
+			return
+		}
+		depth = logD.(int64)
+		fmt.Printf("q.Q Log Depth is %d\n", depth)
+		return
+	}
+
+	path, _ = os.Getwd()
+	config, err = toml.LoadFile(path + "/q.toml")
+	if err == nil {
+		logD := config.Get("LOG_DEPTH")
+		if logD == nil {
+			fmt.Printf("q.Q Log Depth is %d\n", depth)
+			return
+		}
+		depth = logD.(int64)
+		fmt.Printf("q.Q Log Depth is %d\n", depth)
+		return
+	}
+}
 
 type formatter struct {
 	v     reflect.Value
@@ -172,7 +208,7 @@ func (p *printer) printValue(v reflect.Value, showType, quote bool) {
 			}
 			p.visited[vis] = p.depth
 
-			if p.depth > 3 {
+			if p.depth > int(depth) {
 				writeByte(p, '(')
 				writeByte(p, '*')
 				io.WriteString(p, v.Type().String())
@@ -268,7 +304,7 @@ func (p *printer) printValue(v reflect.Value, showType, quote bool) {
 		} else {
 			pp := *p
 			pp.depth++
-			
+
 			switch e.Kind() {
 			case reflect.Struct:
 				pp.printValue(e, true, true)
